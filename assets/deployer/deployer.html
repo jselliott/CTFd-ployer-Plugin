@@ -1,0 +1,28 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+  <div style="max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; gap: 20px;">
+    <div style="width: 250px;">
+      <ul class="list-group">
+        <li class="list-group-item{% if request.path == '/admin/deployer' %} active{% endif %}"><a href="/admin/deployer">Dashboard</a></li>
+        <li class="list-group-item{% if request.path == '/admin/deployer/challenges' %} active{% endif %}"><a href="/admin/deployer/challenges">Challenges</a></li>
+        <li class="list-group-item{% if request.path == '/admin/deployer/config' %} active{% endif %}"><a href="/admin/deployer/config">Config</a></li>
+      </ul>
+    </div>
+
+    <div style="flex-grow: 1;">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+      {% block deployer_content %}
+      <p>Select a section from the menu.</p>
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}

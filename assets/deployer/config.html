@@ -1,0 +1,45 @@
+{% extends "deployer/deployer.html" %}
+
+{% block deployer_content %}
+<h3>Config</h3>
+<form method="POST" action="/admin/deployer/config">
+  <div class="form-group">
+    <label for="deployer_challenge_host">Host URL:</label>
+    <small>Address to connect to deployer API and container host.</small>
+    <input type="text" class="form-control" id="deployer_challenge_host" name="deployer_challenge_host" value="{{ deployer_challenge_host }}"/>
+  </div>
+
+
+  <div class="form-group">
+    <label for="deployer_container_timeout">Container Timeout:</label>
+    <small>How long should the default timeout be before containers are stopped. (Can be overriden per challenge)</small>
+    <input type="text" class="form-control" id="deployer_container_timeout" name="deployer_container_timeout" value="{{ deployer_container_timeout }}"/>
+  </div>
+
+  
+  <div class="form-group">
+    <label for="deployer_dynamic_flags">Use Dynamic Flags:</label>
+    <small>A random flag will be inserted at /flag.txt in the container and associated with the player who started it.</small>
+    <select class="form-control" id="deployer_dynamic_flags" name="deployer_dynamic_flags">
+        <option value='Yes' {% if deployer_dynamic_flags == 'Yes' %} selected{% endif %}>Yes</option>
+        <option value='No' {% if deployer_dynamic_flags == 'No' %} selected{% endif %}>No</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="deployer_flag_prefix">Flag Prefix:</label>
+    <small>The letters before the openening bracket in the flag. (e.g. USCG)</small>
+    <input type="text" class="form-control" id="deployer_flag_prefix" name="deployer_flag_prefix" value="{{ deployer_flag_prefix }}"/>
+  </div>
+
+  <div class="form-group">
+    <label for="deployer_flag_sharing_webhook">Flag Sharing Webhook:</label>
+    <small>A discord webhook to notify admins when players try to share dynamic flags.</small>
+    <input type="text" class="form-control" id="deployer_flag_sharing_webhook" name="deployer_flag_sharing_webhook" value="{{ deployer_flag_sharing_webhook }}"/>
+  </div>
+
+
+  <input type="hidden" value="{{ Session.nonce }}" name="nonce" id="nonce" />
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>
+{% endblock %}

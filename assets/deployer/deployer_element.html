@@ -1,0 +1,17 @@
+<div
+  x-data="Deployer({ fqdn: {% if instance %}'{{ instance.fqdn }}'{% else %}null{% endif %}, expires: {{ instance.expires or 'null' }}, challenge_id: {{ challenge.id }} })"
+  x-init="init()"
+  class="mb-3">
+    <div class="mb-2">
+      <a :href=fqdn target="_blank" class="fw-bold" x-text="fqdn">{{ instance.fqdn }}</a>
+    </div>
+  <div>
+    <button
+      class="btn btn-sm"
+      :class="fqdn ? 'btn-danger' : 'btn-success'"
+      @click="fqdn ? stopInstance() : startInstance()"
+      x-text="buttonText"
+      :disabled="loading"
+    ></button>
+  </div>
+</div>

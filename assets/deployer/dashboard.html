@@ -1,0 +1,61 @@
+{% extends "deployer/deployer.html" %}
+
+{% block deployer_content %}
+  <h2>Active Instances</h2>
+  <div class="table-responsive">
+    <table class="table table-hover w-100">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Name</th>
+          <th>TTL</th>
+          <th style="width: 1%; white-space: nowrap;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for instance in instances %}
+          <tr>
+            <td><a href="/admin/users/{{ instance.player.id }}">{{ instance.player.name }}</a></td>
+            <td>{{ instance.deployer.challenge.name }}</td>
+            <td><span
+              class="ttl-countdown"
+              data-expires="{{ instance.expires }}"
+            >
+              Loading...
+            </span></td>
+            <td>
+              <a href="/admin/deployer/stop/{{ instance.container }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to stop this instance?');">Stop</a>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="4">No instances found.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+{% block scripts %}
+<script>
+  function formatTime(seconds) {
+    if (seconds <= 0) return "Expired";
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}m ${s}s`;
+  }
+
+  function updateTTLs() {
+    const now = Math.floor(Date.now() / 1000);
+    document.querySelectorAll(".ttl-countdown").forEach(el => {
+      const expires = parseInt(el.dataset.expires);
+      const remaining = expires - now;
+      el.textContent = formatTime(remaining);
+    });
+  }
+
+  // Update immediately, then every second
+  updateTTLs();
+  setInterval(updateTTLs, 1000);
+</script>
+{% endblock %}
